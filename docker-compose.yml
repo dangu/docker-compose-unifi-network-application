@@ -1,5 +1,5 @@
 ---
-version: "2.1"
+version: "3.8"
 services:
   unifi-network-application:
     image: lscr.io/linuxserver/unifi-network-application:latest
@@ -30,6 +30,9 @@ services:
       - 6789:6789 #optional
       - 5514:5514/udp #optional
     restart: unless-stopped
+    depends_on:
+      unifi-db:
+        condition: service_healthy
   unifi-db:
     image: docker.io/mongo:4
     container_name: unifi-db
@@ -38,8 +41,8 @@ services:
     ports:
       - 27017:27017
     healthcheck:
-        test: echo 'db.runCommand("ping").ok' | unifi-db unifi-db:27017/test --quiet
-        interval: 10s
+        test: echo 'db.runCommand("ping").ok' | mongo unifi-db:27017/test --quiet
+ #       interval: 1s
         timeout: 10s
         retries: 5
         start_period: 40s

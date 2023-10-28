@@ -37,6 +37,12 @@ services:
       - unifi-network
     ports:
       - 27017:27017
+    healthcheck:
+        test: echo 'db.runCommand("ping").ok' | unifi-db unifi-db:27017/test --quiet
+        interval: 10s
+        timeout: 10s
+        retries: 5
+        start_period: 40s
     volumes:
       - ./vol/bin/unifi-controller/db/data:/data/db
       - ./vol/bin/unifi-controller/db/config:/data/configdb

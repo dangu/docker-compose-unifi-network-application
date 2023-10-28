@@ -41,11 +41,12 @@ services:
     ports:
       - 27017:27017
     healthcheck:
-        test: echo 'db.runCommand("ping").ok' | mongo unifi-db:27017/test --quiet
- #       interval: 1s
-        timeout: 10s
-        retries: 5
-        start_period: 40s
+      test: echo 'db.runCommand("ping").ok' | mongo unifi-db:27017/test --quiet
+      interval: 30s
+      start_interval: 1s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
     volumes:
       - ./vol/bin/unifi-controller/db/data:/data/db
       - ./vol/bin/unifi-controller/db/config:/data/configdb
